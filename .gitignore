@@ -9,4 +9,6 @@
 .vs/
 .vscode/
 _Build/
-Thirdparty/
+Thirdparty/premake5
+Thirdparty/imgui
+Thirdparty/glfw

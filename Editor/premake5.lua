@@ -15,12 +15,14 @@ project "Editor"
     includedirs
     {
         "%{IncludeList.Atom}",
-        "%{IncludeList.Editor}"
+        "%{IncludeList.Editor}",
+        "%{IncludeList.ImGui}"
     }
 
     links
     {
-        "Atom"
+        "Atom",
+        "ImGui"
     }
 
     filter "configurations:Debug"

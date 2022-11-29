@@ -31,6 +31,34 @@ class Utils :
 
         shutil.unpack_archive(file, path);
 
+class GLFW :
+
+    @classmethod
+    def Clone(cls) :
+
+        if(os.path.isdir("Thirdparty/glfw") is True) : return;
+
+        dir = os.getcwd();
+        os.chdir("Thirdparty");
+        subprocess.call("git clone https://github.com/glfw/glfw glfw");
+        os.chdir("glfw");
+        subprocess.call("git checkout 3.3-stable");
+        os.chdir(dir);
+
+class ImGui :
+
+    @classmethod
+    def Clone(cls) :
+
+        if(os.path.isdir("Thirdparty/imgui") is True) : return;
+
+        dir = os.getcwd();
+        os.chdir("Thirdparty");
+        subprocess.call("git clone https://github.com/ocornut/imgui imgui");
+        os.chdir("imgui");
+        subprocess.call("git checkout docking");
+        os.chdir(dir);
+
 class Premake5 :
 
     version = "5.0.0-beta1";
@@ -68,5 +96,7 @@ class Premake5 :
         param_1= sys.argv[1];
         subprocess.call(f"{cls.path}/premake5 {param_1}");
 
+GLFW.Clone();
+ImGui.Clone();
 Premake5.Download();
 Premake5.Generate();

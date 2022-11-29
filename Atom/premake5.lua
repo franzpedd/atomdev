@@ -1,5 +1,5 @@
 project "Atom"
-    kind "StaticLib"
+    kind "SharedLib"
     language "C++"
     cppdialect "C++17"
 
@@ -14,7 +14,17 @@ project "Atom"
 
     includedirs
     {
-        "%{IncludeList.Atom}"
+        "%{IncludeList.Atom}",
+        "%{IncludeList.GLAD}",
+        "%{IncludeList.GLFW}",
+        "%{IncludeList.ImGui}"
+    }
+
+    links
+    {
+        "GLAD",
+        "GLFW",
+        "ImGui"
     }
 
     filter "configurations:Debug"
@@ -26,3 +36,17 @@ project "Atom"
         defines { "ATOM_RELEASE" }
         runtime "Release"
         optimize "Full"
+
+    filter "toolset:msc"
+        prebuildcommands
+        {
+            "mkdir " .. dir .. "/Assets",
+            "copy /y Assets/Fonts" .. " " .. dir .. "/Assets"
+        }
+    
+    filter "toolset:gcc"
+        prebuildcommands
+        {
+            "mkdir -p " .. dir .. "/Assets",
+            "cp -f -r Assets/Fonts" .. " " .. dir .. "/Assets"
+        }

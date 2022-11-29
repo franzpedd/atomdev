@@ -1,7 +1,11 @@
-#include <Atom.h>
+#include "Core/Editor.h"
 
 int main(int argc, char* argv[])
 {
-    std::cout << "Hello World" << std::endl;
+    Editor::Editor* app = new Editor::Editor();
+    
+    app->Init();
+    app->Run();
+    
     return 0;
 }
