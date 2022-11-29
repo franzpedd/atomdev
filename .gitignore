@@ -1,0 +1,12 @@
+# extensions
+*.sln
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+*Makefile
+
+# folders
+.vs/
+.vscode/
+_Build/
+Thirdparty/
