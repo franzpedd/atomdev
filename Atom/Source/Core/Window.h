@@ -57,9 +57,6 @@ namespace Atom
         // updates the window events
         void Update();
 
-        // clears the background color
-        void Clear();
-
         // setup the glfw callbacks
         void SetCallbacks();
 

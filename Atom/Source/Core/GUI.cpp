@@ -1,5 +1,6 @@
 #include "GUI.h"
 #include "Util/Logger.h"
+#include "GUI/FontAwesome.h"
 
 #include <backends/imgui_impl_opengl3.cpp>
 #include <backends/imgui_impl_glfw.cpp>
@@ -25,6 +26,12 @@ namespace Atom
         io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans-Regular.ttf", 20.0f);
         io.IniFilename = "editor.ini";
         io.FontAllowUserScaling = true;
+
+        ImFontConfig cfg;
+        cfg.MergeMode = true;
+        cfg.GlyphMinAdvanceX = 20.0f; // monospace
+        static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+        io.Fonts->AddFontFromFileTTF("Assets/Fonts/fontawesome-webfont.ttf", 20.0f, &cfg, icon_ranges);
 
         ImGui::StyleColorsDark();
         SetDarkTheme();

@@ -5,7 +5,7 @@ namespace Editor
     Example::Example()
         : Layer("Example GUI Layer")
     {
-        LOGGER_TRACE("Creating Example GUI Object");
+        LOGGER_TRACE("Creating Example");
         
     }
 

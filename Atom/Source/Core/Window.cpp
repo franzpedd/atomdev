@@ -58,12 +58,6 @@ namespace Atom
         glfwPollEvents();
     }
 
-    void Window::Clear()
-    {
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-    }
-
     void Window::SetCallbacks()
     {
         // internal error

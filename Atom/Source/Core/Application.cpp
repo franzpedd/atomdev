@@ -22,7 +22,6 @@ namespace Atom
     {
         while(!m_Window->ShouldClose())
         {
-            m_Window->Clear();
             m_GUI->Update();
             m_Window->Update();
         }

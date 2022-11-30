@@ -2,6 +2,12 @@
 
 #include <Atom.h>
 
+#include "GUI/Dockspace.h"
+#include "GUI/Example.h"
+#include "GUI/Menubar.h"
+#include "GUI/OpenedFile.h"
+#include "GUI/Sidemenu.h"
+
 namespace Editor
 {
     class Editor : public Atom::Application
@@ -21,5 +27,10 @@ namespace Editor
 
     private:
 
+        Example* m_Example;
+        Dockspace* m_Dockspace;
+        Menubar* m_Menubar;
+        OpenedFile* m_OpenedFile;
+        Sidemenu* m_Sidemenu;
     };
 }

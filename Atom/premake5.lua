@@ -41,12 +41,16 @@ project "Atom"
         prebuildcommands
         {
             "mkdir " .. dir .. "/Assets",
-            "copy /y Assets/Fonts" .. " " .. dir .. "/Assets"
+            "copy /y Assets/Fonts" .. " " .. dir .. "/Assets",
+            "mkdir " .. dir .. "/Workspace",
+            "copy /y Workspace" .. " " .. dir
         }
     
     filter "toolset:gcc"
         prebuildcommands
         {
             "mkdir -p " .. dir .. "/Assets",
-            "cp -f -r Assets/Fonts" .. " " .. dir .. "/Assets"
+            "cp -f -r Assets/Fonts" .. " " .. dir .. "/Assets",
+            "mkdir -p " .. dir .. "/Workspace",
+            "cp -f -r Workspace" .. " " .. dir
         }
