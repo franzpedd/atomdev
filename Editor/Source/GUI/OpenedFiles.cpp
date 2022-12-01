@@ -14,7 +14,12 @@ namespace Editor
 
     OpenedFiles::~OpenedFiles()
     {
-
+        for(auto file : m_Files)
+        {
+            auto it = std::find(m_Files.begin(), m_Files.end(), file);
+            m_GUI->Remove(file);
+            m_Files.erase(it);
+        }
     }
 
     void OpenedFiles::Update()
@@ -86,22 +91,17 @@ namespace Editor
         ImGui::SetWindowFocus(filename);
     }
 
-    // not being used right now
     void OpenedFiles::Close(const char* path, const char* filename)
     {
-        File* fileref = nullptr;
-
-        for(auto file : m_Files)
+        for(auto& file : m_Files)
         {
-            if(file->GetPath() == path) fileref = file;
-        }
-
-        auto it = std::find(m_Files.begin(), m_Files.end(), fileref);
-
-        if(fileref != nullptr)
-        {
-            m_GUI->Remove(fileref);
-            m_Files.erase(it);
+            if(file->GetPath() == path)
+            {
+                auto it = std::find(m_Files.begin(), m_Files.end(), file);
+                m_GUI->Remove(file);
+                m_Files.erase(it);
+                break;
+            }
         }
     }
 }

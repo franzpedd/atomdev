@@ -8,6 +8,7 @@
 #include "GUI/Menubar.h"
 #include "GUI/OpenedFiles.h"
 #include "GUI/Sidemenu.h"
+#include "GUI/Terminal.h"
 
 namespace Editor
 {
@@ -33,5 +34,6 @@ namespace Editor
         Menubar* m_Menubar;
         OpenedFiles* m_OpenedFiles;
         Sidemenu* m_Sidemenu;
+        Terminal* m_Terminal;
     };
 }

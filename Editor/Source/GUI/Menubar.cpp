@@ -5,8 +5,8 @@
 
 namespace Editor
 {
-    Menubar::Menubar()
-        : Atom::Layer("Menubar")
+    Menubar::Menubar(OpenedFiles* openedfiles)
+        : Atom::Layer("Menubar"), m_OpenedFiles(openedfiles)
     {
         LOGGER_TRACE("Creating Menubar");
     }
@@ -28,6 +28,35 @@ namespace Editor
 
             if(ImGui::BeginMenu(project.str().c_str()))
             {
+                if(ImGui::MenuItem("Novo Projeto"))
+                {
+
+                }
+
+                if(ImGui::MenuItem("Abrir Projeto"))
+                {
+
+                }
+
+                if(ImGui::MenuItem("Salvar Projeto"))
+                {
+
+                }
+
+                ImGui::Separator();
+
+                if(ImGui::MenuItem("Compilar Projeto"))
+                {
+
+                }
+
+                ImGui::Separator();
+
+                if(ImGui::MenuItem("Sair"))
+                {
+
+                }
+
                 ImGui::EndMenu();
             }
 
@@ -37,6 +66,45 @@ namespace Editor
 
             if(ImGui::BeginMenu(edit.str().c_str()))
             {
+                if(ImGui::MenuItem("Desfazer"))
+                {
+
+                }
+
+                if(ImGui::MenuItem("Refazer"))
+                {
+
+                }
+
+                ImGui::Separator();
+
+                if(ImGui::MenuItem("Copiar"))
+                {
+
+                }
+
+                if(ImGui::MenuItem("Colar"))
+                {
+
+                }
+
+                if(ImGui::MenuItem("Recortar"))
+                {
+
+                }
+
+                ImGui::Separator();
+
+                if(ImGui::MenuItem("Deletar"))
+                {
+
+                }
+
+                if(ImGui::MenuItem("Selecionar"))
+                {
+
+                }
+
                 ImGui::EndMenu();
             }
 
@@ -46,6 +114,16 @@ namespace Editor
 
             if(ImGui::BeginMenu(compile.str().c_str()))
             {
+                if(ImGui::MenuItem("Compilar Arquivo"))
+                {
+
+                }
+
+                if(ImGui::MenuItem("Compilar Projeto"))
+                {
+
+                }
+
                 ImGui::EndMenu();
             }
 
