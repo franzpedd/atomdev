@@ -4,8 +4,9 @@
 
 #include "GUI/Dockspace.h"
 #include "GUI/Example.h"
+#include "GUI/File.h"
 #include "GUI/Menubar.h"
-#include "GUI/OpenedFile.h"
+#include "GUI/OpenedFiles.h"
 #include "GUI/Sidemenu.h"
 
 namespace Editor
@@ -30,7 +31,7 @@ namespace Editor
         Example* m_Example;
         Dockspace* m_Dockspace;
         Menubar* m_Menubar;
-        OpenedFile* m_OpenedFile;
+        OpenedFiles* m_OpenedFiles;
         Sidemenu* m_Sidemenu;
     };
 }

@@ -7,7 +7,7 @@
 
 #include <Atom.h>
 
-#include "OpenedFile.h"
+#include "OpenedFiles.h"
 
 namespace Editor
 {
@@ -24,7 +24,7 @@ namespace Editor
     public:
 
         // constructor
-        Sidemenu(OpenedFile* openedfie);
+        Sidemenu(OpenedFiles* openedfiles);
 
         // destructor
         ~Sidemenu();
@@ -46,6 +46,6 @@ namespace Editor
     private:
 
         Dir m_Root;
-        OpenedFile* m_OpenedFile;
+        OpenedFiles* m_OpenedFiles;
     };
 }

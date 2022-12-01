@@ -5,8 +5,8 @@
 
 namespace Editor
 {
-    Sidemenu::Sidemenu(OpenedFile* openedfile)
-        : Atom::Layer("Sidemenu"), m_OpenedFile(openedfile)
+    Sidemenu::Sidemenu(OpenedFiles* openedfiles)
+        : Atom::Layer("Sidemenu"), m_OpenedFiles(openedfiles)
     {
         LOGGER_TRACE("Creating Sidemenu");
 
@@ -115,9 +115,15 @@ namespace Editor
             if(ImGui::TreeNodeEx(parent.Filename.c_str(), ImGuiTreeNodeFlags_Leaf))
             {
                 // open new file or opened file
-                if(ImGui::IsItemClicked() && !std::filesystem::is_directory(parent.Fullpath))
+                if(ImGui::IsItemClicked(0) && !std::filesystem::is_directory(parent.Fullpath))
                 {
-                    m_OpenedFile->OpenFile(parent.Fullpath.c_str());
+                    m_OpenedFiles->Open(parent.Fullpath.c_str(), parent.Filename.c_str());
+                }
+
+                // open context menu
+                if(ImGui::IsItemClicked(1) && !std::filesystem::is_directory(parent.Fullpath))
+                {
+                    // create context menu
                 }
 
                 ImGui::TreePop();

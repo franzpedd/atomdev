@@ -1,23 +1,23 @@
-#include "OpenedFile.h"
+#include "OpenedFiles.h"
 
 #include <string>
 #include <sstream>
 
 namespace Editor
 {
-    OpenedFile::OpenedFile()
-        : Layer("Opened File")
+    OpenedFiles::OpenedFiles(Atom::SharedRef<Atom::GUI>& gui)
+        : Layer("Opened Files"), m_GUI(gui)
     {
-        LOGGER_TRACE("Creating Opened File");
+        LOGGER_TRACE("Creating Opened Files");
         
     }
 
-    OpenedFile::~OpenedFile()
+    OpenedFiles::~OpenedFiles()
     {
 
     }
 
-    void OpenedFile::Update()
+    void OpenedFiles::Update()
     {
         std::ostringstream title;
         title << ICON_FA_CODE;
@@ -25,24 +25,13 @@ namespace Editor
 
         ImGui::Begin(title.str().c_str());
 
-        if(m_ShowDefaultWindow)
-        {
-            ShowDefaultMessage();
-        }
-
-        else
-        {
-            
-        }
-        
-        // update texeditor here
+        ShowDefaultMessage();
 
         ImGui::End();
     }
 
-    void OpenedFile::ShowDefaultMessage()
+    void OpenedFiles::ShowDefaultMessage()
     {
-
         std::stringstream message;
         message << "Este projeto foi desenvolvido por Edson e Felipe durante a disciplina de Compiladores" << std::endl;
         message << "com o intuito de implementar etapas do processo de compilação" << std::endl;
@@ -72,9 +61,47 @@ namespace Editor
         ImGui::Text(message.str().c_str());
     }
 
-    void OpenedFile::OpenFile(const char* path)
+    void OpenedFiles::Open(const char* path, const char* filename)
     {
-        LOGGER_TRACE("Opening %s", path);
-        m_ShowDefaultWindow = false;
+        if(m_Files.size() >= MAX_OPENED_FILES)
+        {
+            LOGGER_WARN("%d is the maximum files opened at a given time", MAX_OPENED_FILES);
+            return;
+        }
+
+        File* fileref = nullptr;
+        for(auto& file : m_Files)
+        {
+            if(file->GetPath() == path) fileref = file;
+        }
+
+        if(fileref == nullptr)
+        {
+            m_Files.push_back(new File(path, filename));
+            m_GUI->Add(m_Files.back());
+            fileref = m_Files.back();
+        }
+        
+        fileref->SetActive(true);
+        ImGui::SetWindowFocus(filename);
+    }
+
+    // not being used right now
+    void OpenedFiles::Close(const char* path, const char* filename)
+    {
+        File* fileref = nullptr;
+
+        for(auto file : m_Files)
+        {
+            if(file->GetPath() == path) fileref = file;
+        }
+
+        auto it = std::find(m_Files.begin(), m_Files.end(), fileref);
+
+        if(fileref != nullptr)
+        {
+            m_GUI->Remove(fileref);
+            m_Files.erase(it);
+        }
     }
 }
