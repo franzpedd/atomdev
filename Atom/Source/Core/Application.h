@@ -1,11 +1,11 @@
 #pragma once
-
+#include "Core/Core.h"
 #include "GUI.h"
 #include "Window.h"
 
 namespace Atom
 {
-    class Application
+    class API Application
     {
     public:
 

@@ -5,7 +5,8 @@ project "Atom"
 
     targetdir(dir)
     objdir(obj)
-
+    debugdir(dir);
+    
     files
     {
         "Source/**.h",
@@ -27,6 +28,11 @@ project "Atom"
         "ImGui"
     }
 
+    defines
+    {
+        "_EXPORT_SHARED_LIB"
+    }
+
     filter "configurations:Debug"
         defines { "ATOM_DEBUG" }
         runtime "Debug"
@@ -37,16 +43,16 @@ project "Atom"
         runtime "Release"
         optimize "Full"
 
-    filter "toolset:msc"
+    filter "action:vs*"
         prebuildcommands
         {
-            "mkdir " .. dir .. "/Assets",
-            "copy /y Assets/Fonts" .. " " .. dir .. "/Assets",
-            "mkdir " .. dir .. "/Workspace",
-            "copy /y Workspace" .. " " .. dir
+            "mkdir " .. dir .. "\\Assets\\Fonts",
+            "Xcopy /y Assets\\Fonts" .. " " .. dir .. "\\Assets\\Fonts",
+            "mkdir " .. dir .. "\\Workspace",
+            "Xcopy /y Workspace" .. " " .. dir .. "\\Workspace"
         }
     
-    filter "toolset:gcc"
+    filter { "toolset:gcc" }
         prebuildcommands
         {
             "mkdir -p " .. dir .. "/Assets",
@@ -54,3 +60,16 @@ project "Atom"
             "mkdir -p " .. dir .. "/Workspace",
             "cp -f -r Workspace" .. " " .. dir
         }
+
+    filter { "toolset:clang" }
+        prebuildcommands
+        {
+            "mkdir -p " .. dir .. "/Assets",
+            "cp -f -r Assets/Fonts" .. " " .. dir .. "/Assets",
+            "mkdir -p " .. dir .. "/Workspace",
+            "cp -f -r Workspace" .. " " .. dir
+        }
+
+    filter "system:windows"
+        defines { "_CRT_SECURE_NO_WARNINGS" }
+        disablewarnings { "4251" }

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Core/Core.h"
 #include "Util/Memory.h"
 
 struct GLFWwindow;
@@ -25,7 +25,8 @@ namespace Atom
         ) 
         : Title(title), Width(width), Height(height), Maximized(true), VerticalSync(true) {}
     };
-    class Window
+
+    class API Window
     {
     public:
 
@@ -59,6 +60,9 @@ namespace Atom
 
         // setup the glfw callbacks
         void SetCallbacks();
+
+        // clears frontbuffer
+        void Clear();
 
     private:
 

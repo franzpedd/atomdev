@@ -26,6 +26,11 @@ project "GLFW"
         "glfw/include"
     }
 
+    defines
+    {
+        "_GLFW_BUILD_DLL"
+    }
+
     filter "configurations:Debug"
         runtime "Debug"
         symbols "On"

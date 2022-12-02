@@ -4,6 +4,7 @@
 
 #include <backends/imgui_impl_opengl3.cpp>
 #include <backends/imgui_impl_glfw.cpp>
+#include <imgui_demo.cpp>
 
 namespace Atom
 {
@@ -18,7 +19,8 @@ namespace Atom
         LOGGER_TRACE("Creating General User Interface");
 
         IMGUI_CHECKVERSION();
-        this->m_Context = ImGui::CreateContext();
+        m_Context = ImGui::CreateContext();
+        ImGui::SetCurrentContext(m_Context);
 
         ImGuiIO &io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;

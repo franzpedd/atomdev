@@ -16,7 +16,7 @@ namespace Editor
         std::string Fullpath;
         std::string Filename;
         std::vector<Dir> Subdirs;
-        bool isDir;
+        bool isDir = false;
     };
 
     class Sidemenu : public Atom::Layer

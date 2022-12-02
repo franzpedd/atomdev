@@ -6,6 +6,8 @@ namespace Editor
     {
         LOGGER_TRACE("Creating Editor");
 
+        ImGui::SetCurrentContext(m_GUI->GetContext());
+
         m_Example = new Example();
         m_Dockspace = new Dockspace();
         m_OpenedFiles = new OpenedFiles(Application::m_GUI);

@@ -1,11 +1,12 @@
 #pragma once
+#include "Core/Core.h"
 
 #include <vector>
 #include <algorithm>
 
 namespace Atom
 {
-    class Layer
+    class API Layer
     {
     public:
 
@@ -26,7 +27,7 @@ namespace Atom
         const char* m_Name;
     };
 
-    class LayerStack
+    class API LayerStack
     {
     public:
 

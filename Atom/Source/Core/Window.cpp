@@ -56,6 +56,7 @@ namespace Atom
     {
         glfwSwapBuffers(m_Window);
         glfwPollEvents();
+        Clear();
     }
 
     void Window::SetCallbacks()
@@ -91,5 +92,11 @@ namespace Atom
 
             win->SetSpecification(specs);
         });
+    }
+
+    void Window::Clear()
+    {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
     }
 }

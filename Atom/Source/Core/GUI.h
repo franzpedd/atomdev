@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Core.h"
 #include "Window.h"
 #include "Util/Layer.h"
 #include "Util/Memory.h"
@@ -8,7 +8,7 @@
 
 namespace Atom
 {
-    class GUI
+    class API GUI
     {
     public:
 
@@ -23,6 +23,9 @@ namespace Atom
 
         // returns the stack of gui objects
         inline LayerStack& GetObjects() { return m_Objects; }
+
+        // returns the gui context
+        inline ImGuiContext* GetContext() { return m_Context; }
 
     public:
 

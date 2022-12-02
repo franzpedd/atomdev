@@ -1,6 +1,6 @@
 project "ImGui"
     location "imgui"
-    kind "SharedLib"
+    kind "StaticLib"
     language "C++"
     cppdialect "C++17"
 
@@ -24,7 +24,6 @@ project "ImGui"
         "imgui/backends/imgui_impl_opengl3.h",
         "imgui/backends/imgui_impl_glfw.h"
     }
-
     includedirs
     {
         "imgui"
@@ -37,3 +36,10 @@ project "ImGui"
     filter "configurations:Release"
         runtime "Release"
         optimize "On"
+
+    filter "toolset:vs*"
+        defines
+        { 
+            "IMGUI_API __declspec( dllexport )",
+            "IMGUI_API __declspec( dllimport )"
+        }

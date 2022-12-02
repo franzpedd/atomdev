@@ -1,4 +1,5 @@
 #pragma once
+#include "Core/Core.h"
 
 #include <cstdint>
 #include <cstdarg>
@@ -8,7 +9,7 @@
 
 namespace Atom
 {
-	class Logger
+	class API Logger
 	{
 	public:
 

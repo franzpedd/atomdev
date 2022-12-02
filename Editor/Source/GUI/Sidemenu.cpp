@@ -64,7 +64,7 @@ namespace Editor
         d.Fullpath = root.u8string();
         d.Filename = root.filename().u8string();
 
-        if(d.isDir == std::filesystem::is_directory(root); d.isDir)
+        if(d.isDir = std::filesystem::is_directory(root); d.isDir)
         {
             AddDirs(d, std::filesystem::directory_iterator(root));
         }
@@ -96,7 +96,7 @@ namespace Editor
         {
             std::filesystem::path f = parent.Filename;
 
-            bool display;
+            bool display = false;
             display |= f.extension() == ".atom";
 
             if(!display)

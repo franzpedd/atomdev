@@ -5,6 +5,7 @@ project "Editor"
 
     targetdir(dir)
     objdir(obj)
+    debugdir(dir);
 
     files
     {
@@ -21,8 +22,12 @@ project "Editor"
 
     links
     {
-        "Atom",
-        "ImGui"
+        "Atom"
+    }
+
+    defines
+    {
+        "_IMPORT_SHARED_LIB"
     }
 
     filter "configurations:Debug"
@@ -34,3 +39,12 @@ project "Editor"
         defines { "EDITOR_RELEASE" }
         runtime "Release"
         optimize "Full"
+
+    filter "system:windows"
+        defines { "_CRT_SECURE_NO_WARNINGS" }
+        disablewarnings { "4251", "6011", "33010", "6031", "26451" }
+
+        links
+        {
+            "ImGui"
+        }
