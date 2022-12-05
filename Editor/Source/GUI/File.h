@@ -6,7 +6,7 @@
 
 namespace Editor
 {
-    class File : public Atom::Layer
+    class File
     {
     public:
 
@@ -14,12 +14,15 @@ namespace Editor
         File(const char* path, const char* name);
 
         // destructor
-        virtual ~File();
+        ~File();
 
-        // layer loop
-        virtual void Update() override;
+        // file render loop
+        void Update();
 
     public:
+        
+        // returns the text editor
+        inline TextEditor& GetTextEditor() { return m_TextEditor; }
 
         // return file's path
         inline const char* GetPath() { return m_Path; }
@@ -35,8 +38,8 @@ namespace Editor
 
     private:
 
-        const char* m_Path;
-        const char* m_Name;
+        const char* m_Path = nullptr;
+        const char* m_Name = nullptr;
         bool m_Show = true;
         TextEditor m_TextEditor;
     };

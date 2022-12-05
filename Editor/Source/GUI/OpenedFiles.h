@@ -23,6 +23,14 @@ namespace Editor
 
     public:
 
+        // returns the list of opened files
+        inline std::vector<File*>& GetFiles() { return m_Files; }
+
+        // returns the last oepened file
+        inline File* GetLastOpenedFile() { return m_LastOpenedFile; }
+
+    public:
+
         // opens a new file
         void Open(const char* path, const char* filename);
 
@@ -38,5 +46,6 @@ namespace Editor
 
         Atom::SharedRef<Atom::GUI>& m_GUI;
         std::vector<File*> m_Files;
+        File* m_LastOpenedFile = nullptr;
     };
 }

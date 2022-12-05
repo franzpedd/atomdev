@@ -1,3 +1,8 @@
+#include "Compiler/Compiler.h"
+#include "Compiler/ErrorSystem.h"
+#include "Compiler/Lexer.h"
+#include "Compiler/Token.h"
+
 #include "Core/Application.h"
 #include "Core/Core.h"
 #include "Core/GUI.h"

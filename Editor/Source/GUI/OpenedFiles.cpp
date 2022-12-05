@@ -14,12 +14,7 @@ namespace Editor
 
     OpenedFiles::~OpenedFiles()
     {
-        for(auto file : m_Files)
-        {
-            auto it = std::find(m_Files.begin(), m_Files.end(), file);
-            m_GUI->Remove(file);
-            m_Files.erase(it);
-        }
+        m_Files.clear();
     }
 
     void OpenedFiles::Update()
@@ -28,11 +23,30 @@ namespace Editor
         title << ICON_FA_CODE;
         title << " Bem vindo";
 
-        ImGui::Begin(title.str().c_str());
+        // verify active windows
+        size_t count = 0;
+        for (size_t i = 0; i < m_Files.size(); i++)
+        {
+            if (m_Files[i]->GetActive()) count++;
+        }
 
-        ShowDefaultMessage();
+        if (count == 0)
+        {
+            ImGui::Begin(title.str().c_str());
+            ShowDefaultMessage();
+            ImGui::End();
 
-        ImGui::End();
+            return;
+        }
+
+        // update windows
+        else
+        {
+            for (auto file : m_Files)
+            {
+                file->Update();
+            }
+        }
     }
 
     void OpenedFiles::ShowDefaultMessage()
@@ -61,7 +75,7 @@ namespace Editor
         message << std::endl;
         message << "Use o menu de diretorio para abrir um arquivo e edita-lo" << std::endl;
         message << "Use o menu principal para navegar" << std::endl;
-        message << "Use o botao Compilar para rodar as etapas no arquivo atual" << std::endl;
+        message << "Use o botao Compilar para compilar arquivo ou projeto" << std::endl;
 
         ImGui::Text(message.str().c_str());
     }
@@ -74,34 +88,26 @@ namespace Editor
             return;
         }
 
-        File* fileref = nullptr;
-        for(auto& file : m_Files)
+        File* ref = nullptr;
+        for (auto file : m_Files)
         {
-            if(file->GetPath() == path) fileref = file;
+            if (file->GetPath() == path)
+            {
+                ref = file;
+            }
         }
 
-        if(fileref == nullptr)
+        if (ref == nullptr)
         {
             m_Files.push_back(new File(path, filename));
-            m_GUI->Add(m_Files.back());
-            fileref = m_Files.back();
         }
-        
-        fileref->SetActive(true);
-        ImGui::SetWindowFocus(filename);
+
+        m_Files[m_Files.size() - 1]->SetActive(true);
+        m_LastOpenedFile = m_Files[m_Files.size() - 1];
     }
 
     void OpenedFiles::Close(const char* path, const char* filename)
     {
-        for(auto& file : m_Files)
-        {
-            if(file->GetPath() == path)
-            {
-                auto it = std::find(m_Files.begin(), m_Files.end(), file);
-                m_GUI->Remove(file);
-                m_Files.erase(it);
-                break;
-            }
-        }
+
     }
 }

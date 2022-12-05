@@ -24,7 +24,7 @@ namespace Editor
     public:
 
         // constructor
-        Sidemenu(OpenedFiles* openedfiles);
+        Sidemenu(Atom::SharedRef<Atom::Compiler>& compiler, OpenedFiles* openedfiles);
 
         // destructor
         ~Sidemenu();
@@ -32,7 +32,15 @@ namespace Editor
         // layer loop
         virtual void Update() override;
 
+    public:
+
+        // returns the list of project files inside the working directory
+        std::vector<const char*> GetAllProjectFiles();
+
     private:
+
+        // adds files to the list of project files
+        void PopulateProjectFiles(const Dir& parent);
 
         // adds all the directories given a parent folder
         void AddDirs(Dir& parent, std::filesystem::directory_iterator it);
@@ -45,7 +53,9 @@ namespace Editor
 
     private:
 
-        Dir m_Root;
+        Atom::SharedRef<Atom::Compiler>& m_Compiler;
         OpenedFiles* m_OpenedFiles;
+        Dir m_Root;
+        std::vector<const char*> m_AllProjectFiles;
     };
 }

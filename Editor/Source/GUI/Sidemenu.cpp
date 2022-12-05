@@ -5,8 +5,8 @@
 
 namespace Editor
 {
-    Sidemenu::Sidemenu(OpenedFiles* openedfiles)
-        : Atom::Layer("Sidemenu"), m_OpenedFiles(openedfiles)
+    Sidemenu::Sidemenu(Atom::SharedRef<Atom::Compiler>& compiler, OpenedFiles* openedfiles)
+        : Atom::Layer("Sidemenu"), m_Compiler(compiler), m_OpenedFiles(openedfiles)
     {
         LOGGER_TRACE("Creating Sidemenu");
 
@@ -34,6 +34,35 @@ namespace Editor
 
         ImGui::EndChild();
         ImGui::End();
+    }
+
+    std::vector<const char*> Sidemenu::GetAllProjectFiles()
+    {
+        m_AllProjectFiles.clear();
+        PopulateProjectFiles(m_Root);
+
+        return m_AllProjectFiles;
+    }
+
+    void Sidemenu::PopulateProjectFiles(const Dir& parent)
+    {
+        if (parent.isDir)
+        {
+            for (const Dir& child : parent.Subdirs)
+            {
+                PopulateProjectFiles(child);
+            }
+        }
+
+        else
+        {
+            std::filesystem::path f = parent.Filename;
+            
+            if (f.extension() == ".atom")
+            {
+                m_AllProjectFiles.push_back(parent.Fullpath.c_str());
+            }
+        }
     }
 
     void Sidemenu::AddDirs(Dir& parent, std::filesystem::directory_iterator it)

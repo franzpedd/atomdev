@@ -29,6 +29,7 @@ namespace Editor
 
     private:
 
+        Atom::SharedRef<Atom::Compiler> m_Compiler;
         Example* m_Example;
         Dockspace* m_Dockspace;
         Menubar* m_Menubar;

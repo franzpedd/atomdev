@@ -6,7 +6,7 @@
 namespace Editor
 {
     File::File(const char* path, const char* name)
-        : Layer("File"), m_Path(path), m_Name(name)
+        : m_Path(path), m_Name(name)
     {
         LOGGER_TRACE("Creating File");
         
