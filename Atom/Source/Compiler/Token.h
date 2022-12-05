@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cstring>
 
 #include "Core/Core.h"
 #include "Util/Memory.h"
