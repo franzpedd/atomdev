@@ -7,5 +7,7 @@ function i32 main(i32 argc, char argv)
     i32 y = 64;
 
     i32 xy = x + y;
+
+    f32 f32var = 54.0;
     f32 varf32 = 32.0;
 }

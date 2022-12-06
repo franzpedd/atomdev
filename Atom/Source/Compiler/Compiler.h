@@ -5,17 +5,10 @@
 #include "Core/Core.h"
 #include "Util/Memory.h"
 
+#include "ErrorSystem.h"
 #include "Lexer.h"
 #include "Parser.h"
-#include "ErrorSystem.h"
-
-/*
-	Livro de regras:
-	Primeiro token precisa ser import
-	Ultimo token precisa ser }
-	Variaveis nao podem ter numero
-
-*/
+#include "Semantical.h"
 
 namespace Atom
 {
@@ -43,9 +36,6 @@ namespace Atom
 
 	public:
 
-		// compiles all the list of files
-		void CompileProject();
-
 		// compile a single file
 		void CompileFile(const char* path);
 
@@ -54,6 +44,7 @@ namespace Atom
 		SharedRef<ErrorSystem> m_ErrorSystem;
 		SharedRef<Lexer> m_Lexer;
 		SharedRef<Parser> m_Parser;
+		SharedRef<Semantical> m_Semantical;
 		std::vector<const char*> m_ProjectFiles;
 	};
 }

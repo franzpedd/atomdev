@@ -81,23 +81,20 @@ namespace Editor
 
             if(ImGui::BeginMenu(compile.str().c_str()))
             {
-                if(ImGui::MenuItem("Compilar Arquivo"))
-                {
-                    if (m_OpenedFiles->GetLastOpenedFile() == nullptr || !m_OpenedFiles->GetLastOpenedFile()->GetActive())
-                    {
-                        LOGGER_WARN("Nenhum arquivo aberto");
-                    }
+                bool compileFile = m_OpenedFiles->GetLastOpenedFile() != nullptr;
+                if (compileFile) compileFile &= m_OpenedFiles->GetLastOpenedFile()->GetActive();
 
-                    else if (m_OpenedFiles->GetLastOpenedFile()->GetActive())
-                    {
-                        m_Compiler->CompileFile(m_OpenedFiles->GetLastOpenedFile()->GetPath());
-                    }
+                if(ImGui::MenuItem("Compilar Arquivo", "F5", nullptr, compileFile))
+                {
+                    m_Compiler->GetErrorSystem()->Clear();
+                    m_Compiler->CompileFile(m_OpenedFiles->GetLastOpenedFile()->GetPath());
                 }
 
-                if (ImGui::MenuItem("Compilar Projeto"))
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Limpar Terminal", "F4"))
                 {
-                    m_Compiler->SetProjectFiles(m_Sidemenu->GetAllProjectFiles());
-                    m_Compiler->CompileProject();
+                    m_Compiler->GetErrorSystem()->Clear();
                 }
 
                 ImGui::EndMenu();

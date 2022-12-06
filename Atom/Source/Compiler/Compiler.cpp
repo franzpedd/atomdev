@@ -15,14 +15,10 @@ namespace Atom
 		m_ErrorSystem = ErrorSystem::Create();
 		m_Lexer = Lexer::Create(m_ErrorSystem);
 		m_Parser = Parser::Create(m_ErrorSystem);
+		m_Semantical = Semantical::Create(m_ErrorSystem);
 	}
 
 	Compiler::~Compiler()
-	{
-
-	}
-
-	void Compiler::CompileProject()
 	{
 
 	}
@@ -31,6 +27,6 @@ namespace Atom
 	{
 		m_Lexer->Lex(path, true);
 		m_Parser->Parse(path, m_Lexer->GetTokens());
-		// m_Semantics->Analise(path);
+		m_Semantical->Analyze(path, m_Lexer->GetTokens());
 	}
 }

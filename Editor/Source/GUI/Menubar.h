@@ -4,6 +4,7 @@
 
 #include "OpenedFiles.h"
 #include "Sidemenu.h"
+#include "Terminal.h"
 
 namespace Editor
 {

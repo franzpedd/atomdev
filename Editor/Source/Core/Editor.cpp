@@ -12,16 +12,16 @@ namespace Editor
         m_Example = new Example();
         m_Dockspace = new Dockspace();
         m_OpenedFiles = new OpenedFiles(m_GUI);
+        m_Terminal = new Terminal(m_Compiler);
         m_Sidemenu = new Sidemenu(m_Compiler, m_OpenedFiles);
         m_Menubar = new Menubar(m_Compiler, m_Sidemenu, m_OpenedFiles);
-        m_Terminal = new Terminal();
     }
 
     Editor::~Editor()
     {
-        delete m_Terminal;
         delete m_Menubar;
         delete m_Sidemenu;
+        delete m_Terminal;
         delete m_OpenedFiles;
         delete m_Dockspace;
         delete m_Example;

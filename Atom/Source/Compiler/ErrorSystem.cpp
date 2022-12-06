@@ -3,13 +3,13 @@
 
 namespace Atom
 {
-    SharedRef<Error> Error::Create(unsigned int line, unsigned int column, Severity level)
+    SharedRef<Error> Error::Create(unsigned int line, unsigned int scope, Severity level)
     {
-        return CreateSharedPointer<Error>(line, column, level);
+        return CreateSharedPointer<Error>(line, scope, level);
     }
 
-    Error::Error(unsigned int line, unsigned int column, Severity level)
-        : Line(line), Column(column), Level(level)
+    Error::Error(unsigned int line, unsigned int scope, Severity level)
+        : Line(line), Scope(scope), Level(level)
     {
 
     }
@@ -20,9 +20,10 @@ namespace Atom
 
         if (this->Level == Severity::WARNING) oss << "[Warning]";
         else if (this->Level == Severity::FATAL) oss << "[Error]";
+        else if(this->Level == Severity::NO_ERROR) oss << "[Feedback]";
 
         oss << "[Line " << this->Line;
-        oss << ":Column " << this->Column;
+        oss << ":Scope " << this->Scope;
         oss << "] " << this->Message.str();
 
         return oss.str();
@@ -41,13 +42,5 @@ namespace Atom
     ErrorSystem::~ErrorSystem()
     {
 
-    }
-
-    void ErrorSystem::Print()
-    {
-        for (size_t i = 0; i < this->m_Errors.size(); i++)
-        {
-            printf("%s\n", this->m_Errors[i]->Format().c_str());
-        }
     }
 }

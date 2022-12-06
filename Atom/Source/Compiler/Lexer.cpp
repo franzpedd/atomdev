@@ -16,12 +16,14 @@ namespace Atom
 
 	Lexer::~Lexer()
 	{
-
+        m_Tokens.clear();
 	}
 
 	void Lexer::Lex(const char* file, bool print)
 	{
 		LOGGER_TRACE("Lexing %s", file);
+
+        m_Tokens.clear();
 
 		std::ifstream f(file);
 
@@ -29,7 +31,7 @@ namespace Atom
 		{
 			SharedRef<Error> e = Error::Create(0, 0, Error::Severity::WARNING);
 			e->Message << "Failed to open file " << file << std::endl;
-			m_ErrorSystem->Add(e);
+			m_ErrorSystem->AddError(e);
 		}
 
 		if (f.is_open())
@@ -39,7 +41,6 @@ namespace Atom
 			bool readingLiterally = false;
 			TokenType type = TokenType::INVALID_TOKEN;
 			unsigned int line = 1;
-			unsigned int column = 1;
 			unsigned int scope = 1;
 			TokenSpecification specs{};
 
@@ -50,7 +51,6 @@ namespace Atom
                 if (c == '\n' && !readingLiterally)
                 {
                     line++;
-                    column = 0;
                 }
 
                 // reading literraly
@@ -58,24 +58,22 @@ namespace Atom
                 {
                     if (c == '"')
                     {
-                        specs.ResetTo(TokenType::STRING, word, file, line, column - (unsigned int)word.size(), scope);
+                        specs.ResetTo(TokenType::STRING, word, file, line, scope);
 
                         SharedRef<Token> tk1 = Token::Create(specs);
                         this->m_Tokens.push_back(tk1);
 
-                        specs.ResetTo(TokenType::QUOTATION_MARKS, std::string{ '\"' }, file, line, (column - (unsigned int)word.size()) + 1, scope);
+                        specs.ResetTo(TokenType::QUOTATION_MARKS, std::string{ '\"' }, file, line, scope);
 
                         SharedRef<Token> tk2 = Token::Create(specs);
                         this->m_Tokens.push_back(tk2);
 
                         word.clear();
-                        column++;
                         readingLiterally = false;
                         continue;
                     }
 
                     word.push_back(c);
-                    column++;
                     continue;
                 }
 
@@ -83,17 +81,20 @@ namespace Atom
                 {
                     if (c == '"')
                     {
-                        specs.ResetTo(TokenType::QUOTATION_MARKS, std::string{ '\"' }, file, line, (column - (unsigned int)word.size()) + 1, scope);
+                        specs.ResetTo(TokenType::QUOTATION_MARKS, std::string{ '\"' }, file, line, scope);
 
                         SharedRef<Token> tk = Token::Create(specs);
                         this->m_Tokens.push_back(tk);
 
                         readingLiterally = true;
                         word.clear();
-                        column++;
                         continue;
                     }
                 }
+
+                // scopes
+                if (c == '{' && !readingLiterally) scope++;
+                if (c == '}' && !readingLiterally) scope--;
 
                 // reading newline or whitespace, process current token and clear
                 if (c == ' ' || c == '\n')
@@ -103,10 +104,9 @@ namespace Atom
                         specs.Type = TokenType::STRING;
                         specs.String = word;
                         specs.Line = line;
-                        specs.Column = column - (unsigned int)word.size();
                         specs.Scope = scope;
 
-                        specs.ResetTo(TokenType::STRING, word, file, line, column - (unsigned int)word.size(), scope);
+                        specs.ResetTo(TokenType::STRING, word, file, line, scope);
 
                         SharedRef<Token> tk = Token::Create(specs);
                         this->m_Tokens.push_back(tk);
@@ -114,14 +114,9 @@ namespace Atom
 
                     word.clear();
                     type = TokenType::INVALID_TOKEN;
-                    column++;
 
                     continue;
                 }
-
-                // scopes
-                if (c == '{' && !readingLiterally) scope++;
-                if (c == '}' && !readingLiterally) scope--;
 
                 // c is a token itself
                 type = StringToToken(std::string{ c }.c_str());
@@ -129,18 +124,17 @@ namespace Atom
                 {
                     if (word.size() > 0)
                     {
-                        specs.ResetTo(TokenType::STRING, word, file, line, column - (unsigned int)word.size(), scope);
+                        specs.ResetTo(TokenType::STRING, word, file, line, scope);
 
                         SharedRef<Token> tk1 = Token::Create(specs);
                         this->m_Tokens.push_back(tk1);
                     }
 
-                    specs.ResetTo(type, std::string{ c }, file, line, (column - (unsigned int)word.size()) + 1, scope);
+                    specs.ResetTo(type, std::string{ c }, file, line, scope);
 
                     SharedRef<Token> tk2 = Token::Create(specs);
                     this->m_Tokens.push_back(tk2);
 
-                    column++;
                     word.clear();
                     continue;
                 }
@@ -151,15 +145,13 @@ namespace Atom
                 type = StringToToken(word.c_str());
                 if (type != TokenType::INVALID_TOKEN)
                 {
-                    specs.ResetTo(type, word, file, line, (column - (unsigned int)word.size()) + 1, scope);
+                    specs.ResetTo(type, word, file, line, scope);
 
                     SharedRef<Token> tk = Token::Create(specs);
                     this->m_Tokens.push_back(tk);
 
                     word.clear();
                 }
-
-                column++;
 			}
 		}
 
@@ -167,14 +159,21 @@ namespace Atom
         {
             for (size_t i = 0; i < this->m_Tokens.size(); i++)
             {
-                LOGGER_TRACE("[%d:%d:%d][FILE:%s][TK:%s][STR:%s]",
-                    m_Tokens[i]->GetSpecification().Scope,
+                SharedRef<Error> e = Error::Create
+                (
                     m_Tokens[i]->GetSpecification().Line,
-                    m_Tokens[i]->GetSpecification().Column,
-                    m_Tokens[i]->GetSpecification().File.c_str(),
-                    TokenToString(m_Tokens[i]->GetSpecification().Type),
-                    m_Tokens[i]->GetSpecification().String.c_str()
+                    m_Tokens[i]->GetSpecification().Scope,
+                    Error::Severity::NO_ERROR
                 );
+                
+                //[FILEPATH][TK][TKSTRING][L:%d-C:%d-S:%d]\n
+                e->Message << "[" << m_Tokens[i]->GetSpecification().File.c_str() << "]";
+                e->Message << "[" << TokenToString(m_Tokens[i]->GetSpecification().Type) << "]";
+                e->Message << "[" << m_Tokens[i]->GetSpecification().String.c_str() << "]";
+                e->Message << "[L:" << e->Line << "-" << "S:" << m_Tokens[i]->GetSpecification().Scope << "]";
+                e->Message << std::endl;
+                    
+                m_ErrorSystem->AddFeedback(e);
             }
         }
 	}
