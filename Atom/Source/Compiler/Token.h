@@ -63,16 +63,15 @@ namespace Atom
         std::string String = {};
         std::string File = {};
         unsigned int Line = 0;
-        unsigned int Scope = 0;
 
         // constructor
         TokenSpecification() = default;
 
         // constructor
-        TokenSpecification(TokenType type, std::string string, std::string file, unsigned int line, unsigned int scope);
+        TokenSpecification(TokenType type, std::string string, std::string file, unsigned int line);
 
         // resets the token to a given specification
-        void ResetTo(TokenType type, std::string string, std::string file, unsigned int line, unsigned int scope);
+        void ResetTo(TokenType type, std::string string, std::string file, unsigned int line);
     };
 
     class API Token

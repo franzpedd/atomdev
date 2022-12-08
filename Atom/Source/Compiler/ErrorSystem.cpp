@@ -3,13 +3,13 @@
 
 namespace Atom
 {
-    SharedRef<Error> Error::Create(unsigned int line, unsigned int scope, Severity level)
+    SharedRef<Error> Error::Create(unsigned int line, Severity level, Phase from)
     {
-        return CreateSharedPointer<Error>(line, scope, level);
+        return CreateSharedPointer<Error>(line, level, from);
     }
 
-    Error::Error(unsigned int line, unsigned int scope, Severity level)
-        : Line(line), Scope(scope), Level(level)
+    Error::Error(unsigned int line, Severity level, Phase from)
+        : Line(line), Level(level), From(from)
     {
 
     }
@@ -18,13 +18,15 @@ namespace Atom
     {
         std::ostringstream oss;
 
-        if (this->Level == Severity::WARNING) oss << "[Warning]";
-        else if (this->Level == Severity::FATAL) oss << "[Error]";
-        else if(this->Level == Severity::NO_ERROR) oss << "[Feedback]";
+        if (Level == Severity::WARNING) oss << "[Warning]";
+        else if (Level == Severity::FATAL) oss << "[Error]";
+        else if(Level == Severity::NO_ERROR) oss << "[Feedback]";
 
-        oss << "[Line " << this->Line;
-        oss << ":Scope " << this->Scope;
-        oss << "] " << this->Message.str();
+        if (From == Phase::LEXER) oss << "[Lexer]";
+        else if (From == Phase::PARSER) oss << "[Parser]";
+        else if (From == Phase::SEMANTIC) oss << "[Semantic]";
+
+        oss << "[Line " << Line << "] " << this->Message.str();
 
         return oss.str();
     }

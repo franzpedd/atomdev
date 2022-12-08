@@ -83,7 +83,7 @@ namespace Editor
             {
                 bool compileFile = m_OpenedFiles->GetLastOpenedFile() != nullptr;
                 if (compileFile) compileFile &= m_OpenedFiles->GetLastOpenedFile()->GetActive();
-
+                
                 if(ImGui::MenuItem("Compilar Arquivo", "F5", nullptr, compileFile))
                 {
                     m_Compiler->GetErrorSystem()->Clear();
@@ -108,6 +108,15 @@ namespace Editor
 
             if (ImGui::BeginMenu(customize.str().c_str()))
             {
+                if(ImGui::MenuItem("Ambiente", "Alt+F9", nullptr))
+                {
+
+                }
+
+                if(ImGui::MenuItem("Texto", "Alt+F10", nullptr))
+                {
+                    
+                }
                 ImGui::EndMenu();
             }
 

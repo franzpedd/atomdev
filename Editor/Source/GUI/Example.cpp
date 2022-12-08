@@ -16,6 +16,6 @@ namespace Editor
 
     void Example::Update()
     {
-        ImGui::ShowDemoWindow();
+        //ImGui::ShowDemoWindow();
     }
 }

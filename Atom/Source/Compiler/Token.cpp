@@ -23,19 +23,18 @@ namespace Atom
         return t;
 	}
 
-    TokenSpecification::TokenSpecification(TokenType type, std::string string, std::string file, unsigned int line, unsigned int scope)
-        : Type(type), String(string), File(file), Line(line),  Scope(scope)
+    TokenSpecification::TokenSpecification(TokenType type, std::string string, std::string file, unsigned int line)
+        : Type(type), String(string), File(file), Line(line)
     {
 
     }
 
-    void TokenSpecification::ResetTo(TokenType type, std::string string, std::string file, unsigned int line, unsigned int scope)
+    void TokenSpecification::ResetTo(TokenType type, std::string string, std::string file, unsigned int line)
     {
         Type = type;
         String = string;
         File = file;
         Line = line;
-        Scope = scope;
     }
 
     SharedRef<Token> Token::Create(TokenSpecification specs)

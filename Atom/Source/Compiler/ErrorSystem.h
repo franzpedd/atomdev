@@ -14,16 +14,21 @@ namespace Atom
             NO_ERROR, WARNING, FATAL
         };
 
+        enum class Phase : unsigned int
+        {
+            UNKNOWN, LEXER, PARSER, SEMANTIC
+        };
+
         unsigned int Line;
-        unsigned int Scope;
         Severity Level;
+        Phase From;
         std::ostringstream Message;
 
         // returns a new smart pointer to the error itself
-        static SharedRef<Error> Create(unsigned int line = 0, unsigned int scope = 0, Severity level = Severity::FATAL);
+        static SharedRef<Error> Create(unsigned int line = 0, Severity level = Severity::FATAL, Phase from = Phase::UNKNOWN);
 
         // constructor
-        Error(unsigned int line = 0, unsigned int scope = 0, Severity level = Severity::FATAL);
+        Error(unsigned int line = 0, Severity level = Severity::FATAL, Phase from = Phase::UNKNOWN);
 
         // formats the information into a string
         std::string Format();

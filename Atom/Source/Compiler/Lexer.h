@@ -30,8 +30,16 @@ namespace Atom
 
 	public:
 
-		// lexes a file
+		// performs the lexical analyses
 		void Lex(const char* file, bool print);
+		
+	private:
+
+		// transforms the contents of a file to a list of tokens and saves it
+		void Interpret(const char* file);
+
+		// modifies variables of type string to it's real type and saves it
+		void PostInterpret();
 
 	private:
 
