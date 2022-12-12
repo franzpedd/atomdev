@@ -41,6 +41,12 @@ namespace Atom
 		// modifies variables of type string to it's real type and saves it
 		void PostInterpret();
 
+		// checks if a given string is actually a big number
+		bool StringIsNumber(std::string str);
+
+		// checks if a given string is actually a big number
+		bool StringIsFloat(std::string str);
+
 	private:
 
 		SharedRef<ErrorSystem>& m_ErrorSystem;

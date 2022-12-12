@@ -22,7 +22,8 @@ project "Editor"
 
     links
     {
-        "Atom"
+        "Atom",
+        "ImGui"
     }
 
     defines
@@ -42,9 +43,4 @@ project "Editor"
 
     filter "system:windows"
         defines { "_CRT_SECURE_NO_WARNINGS" }
-        disablewarnings { "4251", "6011", "33010", "6031", "26451" }
-
-        links
-        {
-            "ImGui"
-        }
+        disablewarnings { "4251", "6011", "33010", "6031", "26451", "6387" }

@@ -1,8 +1,0 @@
-import core;
-
-function i32 main(i32 argc, char argv)
-{
-    print("Hello World",);
-    
-    return 0;
-}

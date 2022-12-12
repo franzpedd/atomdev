@@ -3,13 +3,13 @@
 
 namespace Atom
 {
-    SharedRef<Error> Error::Create(unsigned int line, Severity level, Phase from)
+    SharedRef<Error> Error::Create(std::string file, unsigned int line, unsigned int column, Severity level, Phase from)
     {
-        return CreateSharedPointer<Error>(line, level, from);
+        return CreateSharedPointer<Error>(file, line, column, level, from);
     }
 
-    Error::Error(unsigned int line, Severity level, Phase from)
-        : Line(line), Level(level), From(from)
+    Error::Error(std::string file, unsigned int line, unsigned int column, Severity level, Phase from)
+        : File(file), Line(line), Column(column), Level(level), From(from)
     {
 
     }
@@ -24,9 +24,12 @@ namespace Atom
 
         if (From == Phase::LEXER) oss << "[Lexer]";
         else if (From == Phase::PARSER) oss << "[Parser]";
-        else if (From == Phase::SEMANTIC) oss << "[Semantic]";
+        else if (From == Phase::SEMANTIC) oss << "[Semantical]";
 
-        oss << "[Line " << Line << "] " << this->Message.str();
+        oss << "[File " << File << "]";
+        oss << "[Line " << Line << "]";
+        oss << "[Column " << Column << "]";
+        oss << Message.str();
 
         return oss.str();
     }

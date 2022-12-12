@@ -43,7 +43,7 @@ TextEditor::TextEditor()
 	, mHandleKeyboardInputs(true)
 	, mHandleMouseInputs(true)
 	, mIgnoreImGuiChild(false)
-	, mShowWhitespaces(true)
+	, mShowWhitespaces(false)
 	, mStartTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 {
 	SetPalette(GetDarkPalette());
@@ -2712,7 +2712,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Atom()
 	{
 		static const char* const keywords[] = 
 		{
-			"i32", "u32", "i64", "u64", "f32", "f64", "char", "void",
+			"int", "float", "char", "void",
 			"while", "for", "if", "elif", "else",
 			"case", "default", "switch", "break", "return", "continue",
 			"enum", "struct", "import", "define", "function"

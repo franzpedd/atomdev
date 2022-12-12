@@ -72,4 +72,4 @@ project "Atom"
 
     filter "system:windows"
         defines { "_CRT_SECURE_NO_WARNINGS" }
-        disablewarnings { "4251", "26451", "6031", "33010", "6011" }
+        disablewarnings { "4251", "26451", "6031", "33010", "6011", "6387" }

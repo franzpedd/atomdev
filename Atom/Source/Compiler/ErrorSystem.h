@@ -19,16 +19,18 @@ namespace Atom
             UNKNOWN, LEXER, PARSER, SEMANTIC
         };
 
-        unsigned int Line;
-        Severity Level;
-        Phase From;
-        std::ostringstream Message;
+        unsigned int Line = 1;
+        unsigned int Column = 1;
+        Severity Level = Severity::NO_ERROR;
+        Phase From = Phase::UNKNOWN;
+        std::string File = {};
+        std::ostringstream Message = {};
 
         // returns a new smart pointer to the error itself
-        static SharedRef<Error> Create(unsigned int line = 0, Severity level = Severity::FATAL, Phase from = Phase::UNKNOWN);
+        static SharedRef<Error> Create(std::string file = nullptr, unsigned int line = 0, unsigned int column = 0, Severity level = Severity::FATAL, Phase from = Phase::UNKNOWN);
 
         // constructor
-        Error(unsigned int line = 0, Severity level = Severity::FATAL, Phase from = Phase::UNKNOWN);
+        Error(std::string file = nullptr, unsigned int line = 0, unsigned int column = 0, Severity level = Severity::FATAL, Phase from = Phase::UNKNOWN);
 
         // formats the information into a string
         std::string Format();

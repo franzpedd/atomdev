@@ -7,13 +7,13 @@ namespace Atom
         return TokenList[(unsigned int)(token)];
 	}
 
-	TokenType StringToToken(const char* token)
+	TokenType StringToToken(std::string str)
 	{
         TokenType t = TokenType::INVALID_TOKEN;
 
         for (size_t i = 0; i < (unsigned int)TokenType::TOKEN_MAX; i++)
         {
-            if (strcmp(token, TokenList[i]) == 0)
+            if (str.compare(TokenList[i]) == 0)
             {
                 t = (TokenType)(i);
                 break;
@@ -23,18 +23,10 @@ namespace Atom
         return t;
 	}
 
-    TokenSpecification::TokenSpecification(TokenType type, std::string string, std::string file, unsigned int line)
-        : Type(type), String(string), File(file), Line(line)
+    TokenSpecification::TokenSpecification(TokenType type, std::string string, std::string file, unsigned int line, unsigned int column)
+        : Type(type), String(string), File(file), Line(line), Column(column)
     {
 
-    }
-
-    void TokenSpecification::ResetTo(TokenType type, std::string string, std::string file, unsigned int line)
-    {
-        Type = type;
-        String = string;
-        File = file;
-        Line = line;
     }
 
     SharedRef<Token> Token::Create(TokenSpecification specs)
@@ -44,11 +36,6 @@ namespace Atom
 
     Token::Token(TokenSpecification specs)
         : m_Specs(specs)
-    {
-
-    }
-
-    Token::~Token()
     {
 
     }
