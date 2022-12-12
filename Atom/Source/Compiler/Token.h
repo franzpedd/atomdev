@@ -22,7 +22,7 @@ namespace Atom
         EQUIVALENT, DIFFERENT,
 
         OPEN_B, CLOSE_B, OPEN_C_B, CLOSE_C_B, OPEN_P, CLOSE_P,
-        SEMICOLON, COLON, COMMA, APOSTROPHE, QUOTATION_MARKS,
+        SEMICOLON, COMMA, APOSTROPHE, QUOTATION_MARKS,
         COMMENT_L, COMMENTS_O, COMMENTS_C,
 
         TOKEN_MAX
@@ -42,7 +42,7 @@ namespace Atom
         "==", "!=",
 
         "[", "]", "{", "}", "(", ")",
-        ";", ":", ",", "'", "\"",
+        ";", ",", "'", "\"",
         "--", "/*", "*/",
 
         "Token Max"

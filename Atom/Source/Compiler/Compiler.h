@@ -7,6 +7,7 @@
 
 #include "ErrorSystem.h"
 #include "Lexer.h"
+#include "Parser.h"
 
 namespace Atom
 {
@@ -41,6 +42,7 @@ namespace Atom
 
 		SharedRef<ErrorSystem> m_ErrorSystem;
 		SharedRef<Lexer> m_Lexer;
+		SharedRef<Parser> m_Parser;
 		std::vector<const char*> m_ProjectFiles;
 	};
 }
