@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 #include "Core/Core.h"
 #include "ErrorSystem.h"
 #include "Token.h"
@@ -7,6 +9,12 @@
 
 namespace Atom
 {
+	struct Node
+	{
+		std::string Name;
+		TokenType ReturnType = TokenType::INVALID_TOKEN;
+	};
+
 	class Semantical
 	{
 	public:
@@ -28,5 +36,7 @@ namespace Atom
 	private:
 
 		SharedRef<ErrorSystem>& m_ErrorSystem;
+		std::unordered_map<std::string, Node> m_SymbolTable;
+		std::unordered_map<std::string, Node> m_FunctionTable;
 	};
 }

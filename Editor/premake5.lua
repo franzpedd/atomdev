@@ -43,4 +43,4 @@ project "Editor"
 
     filter "system:windows"
         defines { "_CRT_SECURE_NO_WARNINGS" }
-        disablewarnings { "4251", "6011", "33010", "6031", "26451", "6387" }
+        disablewarnings { "4251", "26451", "6031", "33010", "6011", "6387", "26819", "2662" }

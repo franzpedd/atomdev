@@ -16,6 +16,11 @@ namespace Editor
 
     void Example::Update()
     {
-        //ImGui::ShowDemoWindow();
+        if (m_Show)
+        {
+            ImGui::Begin("##style", &m_Show);
+            ImGui::ShowStyleEditor();
+            ImGui::End();
+        }
     }
 }

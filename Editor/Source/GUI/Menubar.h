@@ -5,6 +5,7 @@
 #include "OpenedFiles.h"
 #include "Sidemenu.h"
 #include "Terminal.h"
+#include "Example.h"
 
 namespace Editor
 {
@@ -13,7 +14,7 @@ namespace Editor
     public:
 
         // constructor
-        Menubar(Atom::SharedRef<Atom::Compiler>& compiler, Sidemenu* sidemenu, OpenedFiles* openedfiles);
+        Menubar(Atom::SharedRef<Atom::Compiler>& compiler, Sidemenu* sidemenu, OpenedFiles* openedfiles, Example* example);
 
         // destructor
         virtual ~Menubar();
@@ -28,5 +29,6 @@ namespace Editor
         Atom::SharedRef<Atom::Compiler>& m_Compiler;
         OpenedFiles* m_OpenedFiles;
         Sidemenu* m_Sidemenu;
+        Example* m_Example;
     };
 }

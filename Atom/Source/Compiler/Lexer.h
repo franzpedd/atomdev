@@ -32,6 +32,9 @@ namespace Atom
 
 		// performs the lexical analyses
 		void Lex(const char* file, bool print);
+
+		// clears the tokenlist
+		void Clear() { m_Tokens.clear(); }
 		
 	private:
 

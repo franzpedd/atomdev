@@ -9,6 +9,7 @@
 #include "Core/Window.h"
 
 #include "GUI/FontAwesome.h"
+#include "GUI/Image.h"
 
 #include "Util/Layer.h"
 #include "Util/Logger.h"

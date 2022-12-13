@@ -2712,9 +2712,9 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Atom()
 	{
 		static const char* const keywords[] = 
 		{
-			"int", "float", "char", "void",
+			"int", "float", "char",
 			"while", "for", "if", "elif", "else",
-			"case", "default", "switch", "break", "return", "continue",
+			"break", "return", "continue",
 			"enum", "struct", "import", "define", "function"
 		};
 		
@@ -2728,7 +2728,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Atom()
 		for (auto& k : identifiers)
 		{
 			Identifier id;
-			id.mDeclaration = "Built-in function";
+			id.mDeclaration = "Funcao integrada";
 			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
 		}
 

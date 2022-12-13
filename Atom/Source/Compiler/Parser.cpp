@@ -63,9 +63,9 @@ namespace Atom
 					Error::Severity::FATAL,
 					Error::Phase::PARSER
 				);
-				e->Message << "Sequencia de tokens invalidos: " 
-					<< previous->GetSpecification().String << " " 
-					<< current->GetSpecification().String << " " 
+				e->Message << "Sequencia invalidada: "
+					<< previous->GetSpecification().String << " "
+					<< current->GetSpecification().String << " "
 					<< next->GetSpecification().String << std::endl;
 				m_ErrorSystem->AddError(e);
 			}
@@ -80,7 +80,7 @@ namespace Atom
 					Error::Severity::NO_ERROR,
 					Error::Phase::PARSER
 				);
-				e->Message << "Sequencia de tokens invalidos: "
+				e->Message << "Sequencia validada: "
 					<< previous->GetSpecification().String << " "
 					<< current->GetSpecification().String << " "
 					<< next->GetSpecification().String << std::endl;
@@ -112,6 +112,7 @@ namespace Atom
 		{
 		case Atom::TokenType::INVALID_TOKEN: break;
 		case Atom::TokenType::NUMBER:
+		case Atom::TokenType::FLOATING_NUMBER:
 		{
 			std::vector<TokenType> acceptablePreviousTokens
 			{
@@ -142,13 +143,15 @@ namespace Atom
 				TokenType::LITERAL, TokenType::INT, TokenType::FLOAT, TokenType::CHAR,
 				TokenType::IMPORT, TokenType::DEFINE, TokenType::OPEN_P, TokenType::OPEN_B, TokenType::OPEN_C_B, TokenType::SEMICOLON,
 				TokenType::COMMA, TokenType::ASSIGNMENT, TokenType::DIFFERENT, TokenType::QUOTATION_MARKS, TokenType::RETURN,
-				TokenType::ADDITION, TokenType::ENUM, TokenType::STRUCT, TokenType::CLOSE_C_B
+				TokenType::ADDITION, TokenType::ENUM, TokenType::STRUCT, TokenType::CLOSE_C_B,
+				TokenType::CLOSE_P
 			};
 			std::vector<TokenType> acceptableNextTokens
 			{
 				TokenType::LITERAL, TokenType::OPEN_P, TokenType::OPEN_B, TokenType::OPEN_C_B, TokenType::SEMICOLON, TokenType::COMMA,
 				TokenType::ASSIGNMENT, TokenType::DIFFERENT, TokenType::CLOSE_P, TokenType::QUOTATION_MARKS,
-				TokenType::ADDITION, TokenType::SUBTRACTION, TokenType::CLOSE_C_B
+				TokenType::ADDITION, TokenType::SUBTRACTION, TokenType::CLOSE_C_B,
+				TokenType::GREATER_THAN, TokenType::GREATER_OR_EQUAL_TO, TokenType::LESSER_THAN, TokenType::LESSER_OR_EQUAL_TO
 			};
 
 			if (std::find(acceptableNextTokens.begin(), acceptableNextTokens.end(), next) != acceptableNextTokens.end()) calculateNext = true;
@@ -188,9 +191,8 @@ namespace Atom
 		case Atom::TokenType::FOR:
 		case Atom::TokenType::IF:
 		case Atom::TokenType::ELSEIF:
-		case Atom::TokenType::ELSE:
 		{
-			std::vector<TokenType> acceptablePreviousTokens{ TokenType::OPEN_C_B, TokenType::CLOSE_C_B, TokenType::SEMICOLON };
+			std::vector<TokenType> acceptablePreviousTokens{ TokenType::ELSE, TokenType::OPEN_C_B, TokenType::CLOSE_C_B, TokenType::SEMICOLON };
 			std::vector<TokenType> acceptableNextTokens{ TokenType::OPEN_P };
 
 
@@ -199,7 +201,17 @@ namespace Atom
 
 			break;
 		}
+		case Atom::TokenType::ELSE:
+		{
+			std::vector<TokenType> acceptablePreviousTokens{ TokenType::OPEN_C_B, TokenType::CLOSE_C_B, TokenType::SEMICOLON };
+			std::vector<TokenType> acceptableNextTokens{ TokenType::OPEN_P, TokenType::IF };
 
+
+			if (std::find(acceptableNextTokens.begin(), acceptableNextTokens.end(), next) != acceptableNextTokens.end()) calculateNext = true;
+			if (std::find(acceptablePreviousTokens.begin(), acceptablePreviousTokens.end(), previous) != acceptablePreviousTokens.end()) calculatePrevious = true;
+
+			break;
+		}
 		case Atom::TokenType::BREAK:
 		{
 			std::vector<TokenType> acceptablePreviousTokens{ TokenType::SEMICOLON, TokenType::OPEN_C_B, TokenType::CLOSE_C_B };
@@ -213,8 +225,8 @@ namespace Atom
 
 		case Atom::TokenType::RETURN:
 		{
-			std::vector<TokenType> acceptablePreviousTokens{ TokenType::LITERAL, TokenType::SEMICOLON };
-			std::vector<TokenType> acceptableNextTokens{ TokenType::LITERAL, TokenType::INT, TokenType::FLOAT, TokenType::CHAR, TokenType::SEMICOLON	};
+			std::vector<TokenType> acceptablePreviousTokens{ TokenType::CLOSE_P, TokenType::LITERAL, TokenType::SEMICOLON };
+			std::vector<TokenType> acceptableNextTokens{ TokenType::NUMBER, TokenType::LITERAL, TokenType::INT, TokenType::FLOAT, TokenType::CHAR, TokenType::SEMICOLON };
 
 			if (std::find(acceptableNextTokens.begin(), acceptableNextTokens.end(), next) != acceptableNextTokens.end()) calculateNext = true;
 			if (std::find(acceptablePreviousTokens.begin(), acceptablePreviousTokens.end(), previous) != acceptablePreviousTokens.end()) calculatePrevious = true;
@@ -271,18 +283,6 @@ namespace Atom
 		case Atom::TokenType::AND:
 		case Atom::TokenType::OR:
 		case Atom::TokenType::NEGATIVE:
-		case Atom::TokenType::ASSIGNMENT:
-		case Atom::TokenType::ADDITION:
-		case Atom::TokenType::SUBTRACTION:
-		case Atom::TokenType::DIVISOR:
-		case Atom::TokenType::MULTIPLICATOR:
-		case Atom::TokenType::MODULE:
-		case Atom::TokenType::GREATER_THAN:
-		case Atom::TokenType::GREATER_OR_EQUAL_TO:
-		case Atom::TokenType::LESSER_THAN:
-		case Atom::TokenType::LESSER_OR_EQUAL_TO:
-		case Atom::TokenType::EQUIVALENT:
-		case Atom::TokenType::DIFFERENT:
 		{
 			std::vector<TokenType> acceptablePreviousTokens{ TokenType::LITERAL, TokenType::NUMBER };
 			std::vector<TokenType> acceptableNextTokens{ TokenType::LITERAL, TokenType::NUMBER, TokenType::OPEN_C_B };
@@ -293,10 +293,60 @@ namespace Atom
 			break;
 		}
 
+		case Atom::TokenType::ASSIGNMENT:
+		{
+			std::vector<TokenType> acceptablePreviousTokens{ TokenType::LESSER_THAN, TokenType::GREATER_THAN, TokenType::ASSIGNMENT, TokenType::LITERAL, TokenType::NUMBER };
+			std::vector<TokenType> acceptableNextTokens{ TokenType::FLOATING_NUMBER, TokenType::ASSIGNMENT, TokenType::LITERAL, TokenType::NUMBER, TokenType::OPEN_C_B };
+
+			if (std::find(acceptableNextTokens.begin(), acceptableNextTokens.end(), next) != acceptableNextTokens.end()) calculateNext = true;
+			if (std::find(acceptablePreviousTokens.begin(), acceptablePreviousTokens.end(), previous) != acceptablePreviousTokens.end()) calculatePrevious = true;
+
+			break;
+		}
+
+		case Atom::TokenType::ADDITION:
+		case Atom::TokenType::SUBTRACTION:
+		case Atom::TokenType::DIVISOR:
+		case Atom::TokenType::MULTIPLICATOR:
+		case Atom::TokenType::MODULE:
+		{
+			std::vector<TokenType> acceptablePreviousTokens{ TokenType::LITERAL, TokenType::NUMBER, TokenType::FLOATING_NUMBER };
+			std::vector<TokenType> acceptableNextTokens{ TokenType::FLOATING_NUMBER, TokenType::LITERAL, TokenType::NUMBER, TokenType::OPEN_C_B };
+
+			if (std::find(acceptableNextTokens.begin(), acceptableNextTokens.end(), next) != acceptableNextTokens.end()) calculateNext = true;
+			if (std::find(acceptablePreviousTokens.begin(), acceptablePreviousTokens.end(), previous) != acceptablePreviousTokens.end()) calculatePrevious = true;
+
+			break;
+		}
+		case Atom::TokenType::GREATER_THAN:
+		{
+			std::vector<TokenType> acceptablePreviousTokens{ TokenType::ASSIGNMENT, TokenType::LITERAL, TokenType::NUMBER };
+			std::vector<TokenType> acceptableNextTokens{ TokenType::ASSIGNMENT, TokenType::LITERAL, TokenType::NUMBER, TokenType::OPEN_C_B };
+
+			if (std::find(acceptableNextTokens.begin(), acceptableNextTokens.end(), next) != acceptableNextTokens.end()) calculateNext = true;
+			if (std::find(acceptablePreviousTokens.begin(), acceptablePreviousTokens.end(), previous) != acceptablePreviousTokens.end()) calculatePrevious = true;
+
+			break;
+		}
+		case Atom::TokenType::GREATER_OR_EQUAL_TO:
+		case Atom::TokenType::LESSER_THAN:
+		case Atom::TokenType::LESSER_OR_EQUAL_TO:
+		case Atom::TokenType::EQUIVALENT:
+		case Atom::TokenType::DIFFERENT:
+		{
+			std::vector<TokenType> acceptablePreviousTokens{ TokenType::LITERAL, TokenType::NUMBER };
+			std::vector<TokenType> acceptableNextTokens{ TokenType::ASSIGNMENT, TokenType::LITERAL, TokenType::NUMBER, TokenType::OPEN_C_B };
+
+			if (std::find(acceptableNextTokens.begin(), acceptableNextTokens.end(), next) != acceptableNextTokens.end()) calculateNext = true;
+			if (std::find(acceptablePreviousTokens.begin(), acceptablePreviousTokens.end(), previous) != acceptablePreviousTokens.end()) calculatePrevious = true;
+
+			break;
+		}
+
 		case Atom::TokenType::OPEN_B:
 		{
 			std::vector<TokenType> acceptablePreviousTokens{ TokenType::LITERAL, TokenType::OPEN_B, TokenType::CLOSE_B };
-			std::vector<TokenType> acceptableNextTokens{ TokenType::NUMBER, TokenType::LITERAL, TokenType::OPEN_B, TokenType::CLOSE_B };
+			std::vector<TokenType> acceptableNextTokens{ TokenType::FLOATING_NUMBER, TokenType::NUMBER, TokenType::LITERAL, TokenType::OPEN_B, TokenType::CLOSE_B };
 
 			if (std::find(acceptableNextTokens.begin(), acceptableNextTokens.end(), next) != acceptableNextTokens.end()) calculateNext = true;
 			if (std::find(acceptablePreviousTokens.begin(), acceptablePreviousTokens.end(), previous) != acceptablePreviousTokens.end()) calculatePrevious = true;
@@ -306,8 +356,8 @@ namespace Atom
 
 		case Atom::TokenType::CLOSE_B:
 		{
-			std::vector<TokenType> acceptablePreviousTokens{ TokenType::LITERAL, TokenType::NUMBER, TokenType::OPEN_B, TokenType::CLOSE_B };
-			std::vector<TokenType> acceptableNextTokens{ TokenType::EQUIVALENT, TokenType::ASSIGNMENT, TokenType::OPEN_B, TokenType::CLOSE_B };
+			std::vector<TokenType> acceptablePreviousTokens{ TokenType::FLOATING_NUMBER, TokenType::LITERAL, TokenType::NUMBER, TokenType::OPEN_B, TokenType::CLOSE_B };
+			std::vector<TokenType> acceptableNextTokens{ TokenType::EQUIVALENT, TokenType::ASSIGNMENT, TokenType::OPEN_B, TokenType::CLOSE_B, TokenType::SEMICOLON };
 
 			if (std::find(acceptableNextTokens.begin(), acceptableNextTokens.end(), next) != acceptableNextTokens.end()) calculateNext = true;
 			if (std::find(acceptablePreviousTokens.begin(), acceptablePreviousTokens.end(), previous) != acceptablePreviousTokens.end()) calculatePrevious = true;
@@ -326,7 +376,7 @@ namespace Atom
 			std::vector<TokenType> acceptableNextTokens
 			{
 				TokenType::LITERAL, TokenType::FOR, TokenType::WHILE, TokenType::IF, TokenType::ELSEIF, TokenType::ELSE,
-				TokenType::INT, TokenType::FLOAT, TokenType::CHAR,
+				TokenType::INT, TokenType::FLOAT, TokenType::CHAR, TokenType::FUNCTION,
 				TokenType::OPEN_C_B, TokenType::CLOSE_C_B, TokenType::QUOTATION_MARKS, TokenType::SEMICOLON
 			};
 
@@ -338,8 +388,8 @@ namespace Atom
 
 		case Atom::TokenType::OPEN_P:
 		{
-			std::vector<TokenType> acceptablePreviousTokens{ TokenType::LITERAL, TokenType::CLOSE_P, TokenType::SEMICOLON };
-			std::vector<TokenType> acceptableNextTokens{ TokenType::LITERAL, TokenType::NUMBER, TokenType::QUOTATION_MARKS, TokenType::APOSTROPHE, TokenType::INT, TokenType::FLOAT, TokenType::CHAR };
+			std::vector<TokenType> acceptablePreviousTokens{ TokenType::IF, TokenType::ELSEIF, TokenType::ELSE, TokenType::LITERAL, TokenType::CLOSE_P, TokenType::SEMICOLON };
+			std::vector<TokenType> acceptableNextTokens{ TokenType::VECTOR_CHAR, TokenType::LITERAL, TokenType::NUMBER, TokenType::QUOTATION_MARKS, TokenType::APOSTROPHE, TokenType::INT, TokenType::FLOAT, TokenType::CHAR };
 
 			if (std::find(acceptableNextTokens.begin(), acceptableNextTokens.end(), next) != acceptableNextTokens.end()) calculateNext = true;
 			if (std::find(acceptablePreviousTokens.begin(), acceptablePreviousTokens.end(), previous) != acceptablePreviousTokens.end()) calculatePrevious = true;
@@ -349,8 +399,8 @@ namespace Atom
 
 		case Atom::TokenType::CLOSE_P:
 		{
-			std::vector<TokenType> acceptablePreviousTokens{ TokenType::LITERAL, TokenType::NUMBER, TokenType::CLOSE_P, TokenType::CLOSE_C_B, TokenType::SEMICOLON, TokenType::QUOTATION_MARKS, TokenType::APOSTROPHE };
-			std::vector<TokenType> acceptableNextTokens{ TokenType::CLOSE_P, TokenType::OPEN_P, TokenType::OPEN_C_B, TokenType::OPEN_B, TokenType::SEMICOLON };
+			std::vector<TokenType> acceptablePreviousTokens{ TokenType::VECTOR_CHAR, TokenType::LITERAL, TokenType::NUMBER, TokenType::CLOSE_P, TokenType::CLOSE_C_B, TokenType::SEMICOLON, TokenType::QUOTATION_MARKS, TokenType::APOSTROPHE };
+			std::vector<TokenType> acceptableNextTokens{ TokenType::LITERAL, TokenType::RETURN, TokenType::CLOSE_P, TokenType::OPEN_P, TokenType::OPEN_C_B, TokenType::OPEN_B, TokenType::SEMICOLON };
 
 			if (std::find(acceptableNextTokens.begin(), acceptableNextTokens.end(), next) != acceptableNextTokens.end()) calculateNext = true;
 			if (std::find(acceptablePreviousTokens.begin(), acceptablePreviousTokens.end(), previous) != acceptablePreviousTokens.end()) calculatePrevious = true;
@@ -360,7 +410,7 @@ namespace Atom
 
 		case Atom::TokenType::SEMICOLON:
 		{
-			std::vector<TokenType> acceptablePreviousTokens{ TokenType::LITERAL, TokenType::NUMBER, TokenType::CLOSE_B, TokenType::CLOSE_C_B, TokenType::CLOSE_P };
+			std::vector<TokenType> acceptablePreviousTokens{ TokenType::FLOATING_NUMBER, TokenType::LITERAL, TokenType::NUMBER, TokenType::CLOSE_B, TokenType::CLOSE_C_B, TokenType::CLOSE_P };
 			std::vector<TokenType> acceptableNextTokens
 			{
 				TokenType::LITERAL, TokenType::INT, TokenType::FLOAT,TokenType::CHAR,
@@ -377,8 +427,8 @@ namespace Atom
 
 		case Atom::TokenType::COMMA:
 		{
-			std::vector<TokenType> acceptablePreviousTokens{ TokenType::LITERAL, TokenType::NUMBER, TokenType::CLOSE_B, TokenType::CLOSE_P, TokenType::CLOSE_C_B };
-			std::vector<TokenType> acceptableNextTokens{ TokenType::LITERAL, TokenType::NUMBER, TokenType::INT, TokenType::FLOAT, TokenType::CHAR };
+			std::vector<TokenType> acceptablePreviousTokens{ TokenType::VECTOR_CHAR, TokenType::LITERAL, TokenType::NUMBER, TokenType::CLOSE_B, TokenType::CLOSE_P, TokenType::CLOSE_C_B };
+			std::vector<TokenType> acceptableNextTokens{ TokenType::VECTOR_CHAR, TokenType::LITERAL, TokenType::NUMBER, TokenType::INT, TokenType::FLOAT, TokenType::CHAR };
 
 			if (std::find(acceptableNextTokens.begin(), acceptableNextTokens.end(), next) != acceptableNextTokens.end()) calculateNext = true;
 			if (std::find(acceptablePreviousTokens.begin(), acceptablePreviousTokens.end(), previous) != acceptablePreviousTokens.end()) calculatePrevious = true;
@@ -396,7 +446,7 @@ namespace Atom
 
 			break;
 		}
-
+		
 		// unused because comments are handled by lexer
 		case Atom::TokenType::COMMENT_L:	return true;
 		case Atom::TokenType::COMMENTS_O:	return true;
@@ -405,6 +455,6 @@ namespace Atom
 		default: return false;
 		}
 
-		return true;
+		return calculateNext && calculatePrevious;
 	}
 }

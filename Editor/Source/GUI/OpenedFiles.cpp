@@ -2,6 +2,7 @@
 
 #include <string>
 #include <sstream>
+#include <algorithm>
 
 namespace Editor
 {
@@ -52,7 +53,7 @@ namespace Editor
     void OpenedFiles::ShowDefaultMessage()
     {
         std::stringstream message;
-        message << "Este projeto foi desenvolvido por Edson e Felipe durante a disciplina de Compiladores" << std::endl;
+        message << "Este projeto foi desenvolvido por Edson, Felipe e Leticia durante a disciplina de Compiladores" << std::endl;
         message << "com o intuito de implementar etapas do processo de compilação" << std::endl;
         message << "As etapas são:" << std::endl;
         message << "Gramática" << std::endl;
@@ -72,6 +73,7 @@ namespace Editor
         message << "ImGui: interface grafica imediata "<< std::endl;
         message << "ImGuiColorTextEdit: editor de texto para ImGui" << std::endl;
         message << "IconFontCppHeaders: Awesome font header para C++" << std::endl;
+        message << "stb_image: Carregar imagens" << std::endl;
         message << std::endl;
         message << "Use o menu de diretorio para abrir um arquivo e edita-lo" << std::endl;
         message << "Use o menu principal para navegar" << std::endl;
@@ -89,25 +91,61 @@ namespace Editor
         }
 
         File* ref = nullptr;
+        size_t i = 0;
         for (auto file : m_Files)
         {
-            if (file->GetPath() == path)
+            if (file->GetPath() == path && file->GetName() == filename)
             {
                 ref = file;
+                break;
             }
+            i++;
         }
 
         if (ref == nullptr)
         {
             m_Files.push_back(new File(path, filename));
+            m_LastOpenedFile = m_Files[m_Files.size() - 1];
+            m_Files[m_Files.size() - 1]->SetActive(true);
         }
 
-        m_Files[m_Files.size() - 1]->SetActive(true);
-        m_LastOpenedFile = m_Files[m_Files.size() - 1];
+        else
+        {
+            m_LastOpenedFile = m_Files[i];
+            m_Files[i]->SetActive(true);
+        }
     }
 
     void OpenedFiles::Close(const char* path, const char* filename)
     {
 
+    }
+
+    // changes the pallete for all files
+    void OpenedFiles::ChangePallete(int id)
+    {
+        if (id == 0) // dark
+        {
+            for (size_t i = 0; i < m_Files.size(); i++)
+            {
+                m_Files[i]->GetTextEditor().SetPalette(m_Files[i]->GetTextEditor().GetDarkPalette());
+            }
+        }
+
+        else if (id == 1) // light
+        {
+            for (size_t i = 0; i < m_Files.size(); i++)
+            {
+                m_Files[i]->GetTextEditor().SetPalette(m_Files[i]->GetTextEditor().GetLightPalette());
+            }
+        }
+
+        else // blue
+        {
+            for (size_t i = 0; i < m_Files.size(); i++)
+            {
+                m_Files[i]->GetTextEditor().SetPalette(m_Files[i]->GetTextEditor().GetRetroBluePalette());
+            }
+        }
     }
 }

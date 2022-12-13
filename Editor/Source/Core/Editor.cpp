@@ -14,7 +14,7 @@ namespace Editor
         m_OpenedFiles = new OpenedFiles(m_GUI);
         m_Terminal = new Terminal(m_Compiler);
         m_Sidemenu = new Sidemenu(m_Compiler, m_OpenedFiles);
-        m_Menubar = new Menubar(m_Compiler, m_Sidemenu, m_OpenedFiles);
+        m_Menubar = new Menubar(m_Compiler, m_Sidemenu, m_OpenedFiles, m_Example);
     }
 
     Editor::~Editor()

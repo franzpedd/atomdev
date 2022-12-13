@@ -10,7 +10,7 @@ namespace Atom
 {
     enum class API TokenType : unsigned int
     {
-        INVALID_TOKEN, NUMBER, LITERAL, VECTOR_CHAR,
+        INVALID_TOKEN, NUMBER, FLOATING_NUMBER, LITERAL, VECTOR_CHAR,
 
         INT, FLOAT, CHAR,
         WHILE, FOR, IF, ELSEIF, ELSE, BREAK, RETURN, CONTINUE,
@@ -30,7 +30,7 @@ namespace Atom
 
     static const char* TokenList[] =
     {
-        "Invalid Token", "Number", "Literal", "Vector of Chars",
+        "Invalid Token", "Number", "Floating Number", "Literal", "Vector of Chars",
 
         "int", "float", "char",
         "while", "for", "if", "elif", "else", "break", "return", "continue",

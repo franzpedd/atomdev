@@ -48,6 +48,8 @@ project "Atom"
         {
             "mkdir " .. dir .. "\\Assets\\Fonts",
             "Xcopy /y Assets\\Fonts" .. " " .. dir .. "\\Assets\\Fonts",
+            "mkdir " .. dir .. "\\Assets\\Images",
+            "Xcopy /y Assets\\Images" .. " " .. dir .. "\\Assets\\Images",
             "mkdir " .. dir .. "\\Workspace",
             "Xcopy /y Workspace" .. " " .. dir .. "\\Workspace"
         }
@@ -57,6 +59,7 @@ project "Atom"
         {
             "mkdir -p " .. dir .. "/Assets",
             "cp -f -r Assets/Fonts" .. " " .. dir .. "/Assets",
+            "cp -f -r Assets/Images" .. " " .. dir .. "/Assets",
             "mkdir -p " .. dir .. "/Workspace",
             "cp -f -r Workspace" .. " " .. dir
         }
@@ -66,10 +69,11 @@ project "Atom"
         {
             "mkdir -p " .. dir .. "/Assets",
             "cp -f -r Assets/Fonts" .. " " .. dir .. "/Assets",
+            "cp -f -r Assets/Images" .. " " .. dir .. "/Assets",
             "mkdir -p " .. dir .. "/Workspace",
             "cp -f -r Workspace" .. " " .. dir
         }
 
     filter "system:windows"
         defines { "_CRT_SECURE_NO_WARNINGS" }
-        disablewarnings { "4251", "26451", "6031", "33010", "6011", "6387" }
+        disablewarnings { "4251", "26451", "6031", "33010", "6011", "6387", "26819", "2662" }

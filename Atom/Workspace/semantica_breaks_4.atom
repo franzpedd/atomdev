@@ -1,0 +1,38 @@
+import core;
+
+function int main(int argc, char argv)
+{
+    print("Hello World"); -- comentando a linha
+
+    /*
+    Testando comentario multi-linha
+    vamo ver se funciona mesmo
+    */
+
+    int x = 3;
+    if(x >= 3) print("x >= 3");
+
+    x = 5;
+    if(x <= 5) print("x <= 3");
+
+    x = 7;
+    if(x == 5) print("x == 3");
+
+    float f = 32.43;
+
+    x = func(x, 0);
+
+    int aew[3];
+
+    int h = 3 + 5;
+    int w = 3 + 5.3;
+    
+    return 0;
+}
+
+function int func(int a, int b)
+{
+    if(a == 3) return 3;
+    else if(b == 4) return 5;
+    return 0;
+}

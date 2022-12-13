@@ -5,8 +5,8 @@
 
 namespace Editor
 {
-    Menubar::Menubar(Atom::SharedRef<Atom::Compiler>& compiler, Sidemenu* sidemenu, OpenedFiles* openedfiles)
-        : Atom::Layer("Menubar"), m_Compiler(compiler), m_Sidemenu(sidemenu), m_OpenedFiles(openedfiles)
+    Menubar::Menubar(Atom::SharedRef<Atom::Compiler>& compiler, Sidemenu* sidemenu, OpenedFiles* openedfiles, Example* example)
+        : Atom::Layer("Menubar"), m_Compiler(compiler), m_Sidemenu(sidemenu), m_OpenedFiles(openedfiles), m_Example(example)
     {
         LOGGER_TRACE("Creating Menubar");
     }
@@ -108,24 +108,42 @@ namespace Editor
 
             if (ImGui::BeginMenu(customize.str().c_str()))
             {
-                if(ImGui::MenuItem("Ambiente", "Alt+F9", nullptr))
+                std::ostringstream style1;
+                style1 << ICON_FA_HEART;
+                style1 << " Estilo";
+                
+                if(ImGui::MenuItem(style1.str().c_str(), "Alt+F9", nullptr))
                 {
-
+                    m_Example->SetActive(true);
                 }
 
-                if(ImGui::MenuItem("Texto", "Alt+F10", nullptr))
+                std::ostringstream style2;
+                style2 << ICON_FA_STAR_O;
+                style2 << " Editor Escuro";
+
+                if (ImGui::MenuItem(style2.str().c_str(), nullptr))
                 {
-                    
+                    m_OpenedFiles->ChangePallete(0);
                 }
-                ImGui::EndMenu();
-            }
 
-            std::ostringstream help;
-            help << ICON_FA_QUESTION_CIRCLE_O;
-            help << " Ajuda";
+                std::ostringstream style3;
+                style3 << ICON_FA_STAR_O;
+                style3 << " Editor Claro";
 
-            if(ImGui::BeginMenu(help.str().c_str()))
-            {
+                if (ImGui::MenuItem(style3.str().c_str(), nullptr))
+                {
+                    m_OpenedFiles->ChangePallete(1);
+                }
+
+                std::ostringstream style4;
+                style4 << ICON_FA_STAR_O;
+                style4 << " Editor Azul-Retro";
+
+                if (ImGui::MenuItem(style4.str().c_str(), nullptr))
+                {
+                    m_OpenedFiles->ChangePallete(2);
+                }
+
                 ImGui::EndMenu();
             }
 

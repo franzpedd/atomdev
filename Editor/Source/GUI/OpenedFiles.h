@@ -37,6 +37,9 @@ namespace Editor
         // closes a file from the list of opened files
         void Close(const char* path, const char* filename);
 
+        // changes the pallete for all files
+        void ChangePallete(int id);
+
     private:
 
         // shows a default message if theres no available file

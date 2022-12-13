@@ -5,6 +5,9 @@
 #include <GLFW/glfw3.h>
 #include <glad/gl.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "GUI/Image.h"
+
 namespace Atom
 {
     SharedRef<Window> Window::Create(WindowSpecification& specs)
@@ -36,6 +39,11 @@ namespace Atom
         glfwSwapInterval(m_Specification.VerticalSync);
 
         ASSERT(gladLoadGL(glfwGetProcAddress) != 0, "Failed to load glad");
+
+        GLFWimage images[1];
+        images[0].pixels = stbi_load("Assets/Images/logo.png", &images[0].width, &images[0].height, 0, 4); // rgba channels 
+        glfwSetWindowIcon(m_Window, 1, images);
+        stbi_image_free(images[0].pixels);
         
         glfwSetWindowUserPointer(m_Window, reinterpret_cast<void *>(this));
         SetCallbacks();

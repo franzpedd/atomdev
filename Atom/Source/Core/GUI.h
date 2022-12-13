@@ -46,6 +46,9 @@ namespace Atom
         // changes the theme to light
         void SetLightTheme();
 
+        // set custom style
+        void SetStyle();
+
     private:
 
         SharedRef<Window>& m_Window;

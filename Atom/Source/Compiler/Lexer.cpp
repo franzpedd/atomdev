@@ -203,7 +203,7 @@ namespace Atom
 
                 if (isFloat)
                 {
-                    m_Tokens[i]->GetSpecification().Type = TokenType::FLOAT;
+                    m_Tokens[i]->GetSpecification().Type = TokenType::FLOATING_NUMBER;
                     continue;
                 }
             }
