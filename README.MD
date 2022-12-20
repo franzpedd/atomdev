@@ -15,6 +15,9 @@ Downloaded at runtime:
 * [glad](https://github.com/Dav1dde/glad)
 * [GLFW](https://github.com/glfw/glfw)
 * [ImGui](https://github.com/ocornut/imgui)
+
+Already on project:
+
 * [ImGuiColorTextEdit](https://github.com/BalazsJako/ImGuiColorTextEdit)
 * [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h)
 * [IconFontCppHeaders](https://github.com/juliettef/IconFontCppHeaders)
